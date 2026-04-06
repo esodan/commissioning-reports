@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SyncPackage xmlns="urn:commissioning:sync-package:1.0" version="1.0">
+  <Metadata>
+    <PackageId>PKG-20260406-0001</PackageId>
+    <CreatedAt>2026-04-06T00:00:00Z</CreatedAt>
+    <SourceSystem>commissioning-core</SourceSystem>
+  </Metadata>
+  <Items>
+    <Item>
+      <ItemId>ITEM-1001</ItemId>
+      <Name>Boiler Unit A</Name>
+      <Status>active</Status>
+      <UpdatedAt>2026-04-06T00:30:00Z</UpdatedAt>
+    </Item>
+  </Items>
+</SyncPackage>
