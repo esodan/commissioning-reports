@@ -124,6 +124,14 @@
   </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="EmbeddedContentType">
+  <xs:simpleContent>
+    <xs:extension base="xs:base64Binary">
+      <xs:attribute name="encoding" type="NonEmptyString" use="optional" fixed="base64"/>
+    </xs:extension>
+  </xs:simpleContent>
+</xs:complexType>
+
   <!-- ========================================================= -->
   <!-- Root -->
   <!-- ========================================================= -->
@@ -313,7 +321,23 @@
       <xs:element name="MimeType" type="NonEmptyString"/>
       <xs:element name="Description" type="xs:string" minOccurs="0"/>
       <xs:element name="SHA256" type="xs:string" minOccurs="0"/>
-      <xs:element name="URI" type="NonEmptyString"/>
+      <xs:choice>
+        <xs:element name="URI" type="NonEmptyString">
+          <xs:annotation>
+            <xs:documentation>
+              External evidence locator. Use when the file is stored outside the XML payload.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="EmbeddedContent" type="EmbeddedContentType">
+          <xs:annotation>
+            <xs:documentation>
+              Base64-encoded evidence content embedded directly in the XML payload. Business rule:
+              sizeBytes and SHA256 must describe the decoded binary content.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
     </xs:sequence>
     <xs:attribute name="id" type="IdentifierType" use="required"/>
     <xs:attribute name="type" type="EvidenceTypeType" use="required"/>

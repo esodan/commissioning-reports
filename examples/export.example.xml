@@ -104,15 +104,15 @@
         </TestEvaluation>
         <EvidenceList>
           <Evidence id="EVD-TEST-0001"
-                    type="photo"
-                    sizeBytes="348122"
+                    type="attachment"
+                    sizeBytes="5"
                     capturedAt="2026-04-05T16:28:00Z">
-            <Title>Test setup photo</Title>
-            <FileName>t1-winding-resistance-setup.jpg</FileName>
-            <MimeType>image/jpeg</MimeType>
-            <Description>Photograph of the transformer and measurement equipment before capture.</Description>
-            <SHA256>5f70bf18a086007016e948b04aed3b82103a36beA41755b6c5f2b0b1323e94c3</SHA256>
-            <URI>https://example.invalid/evidence/t1-winding-resistance-setup.jpg</URI>
+            <Title>Embedded test note</Title>
+            <FileName>t1-winding-resistance-note.txt</FileName>
+            <MimeType>text/plain</MimeType>
+            <Description>Small embedded evidence example carried directly in the XML payload.</Description>
+            <SHA256>2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824</SHA256>
+            <EmbeddedContent encoding="base64">aGVsbG8=</EmbeddedContent>
           </Evidence>
         </EvidenceList>
         <CIMExtensions>

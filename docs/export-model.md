@@ -16,7 +16,8 @@ The export XML is a multi-report payload defined by the current export schema.
 - nested `<Tests>` containing one or more `<Test>` elements per report
 - nested `<Measurements>` per test
 - optional nested `<TestEvaluation>` per test, including `ValidityCriteria` when needed
-- optional report-level and test-level `<EvidenceList>`
+- optional report-level and test-level `<EvidenceList>`, where each evidence item can carry either
+  an external `URI` or inline base64-encoded `EmbeddedContent`
 - optional `PreparedBy` and `Signature` elements for signoff context
 
 This structure preserves both machine readability and traceability.
@@ -31,6 +32,23 @@ Historical meaning is preserved by exporting:
 - sufficient rule context to reproduce outcome interpretation through `ValidityCriteria` and computed values.
 
 As a result, downstream systems can distinguish “what happened” from “what the current catalog says now”.
+
+## Inline evidence support
+
+Evidence can now travel in two modes:
+
+- referenced mode using `URI` when the file is hosted or archived externally,
+- embedded mode using `EmbeddedContent` when the file bytes must travel inside the XML payload.
+
+For embedded evidence:
+
+- the content is encoded as base64,
+- `sizeBytes` must describe the decoded binary size,
+- `SHA256` should describe the decoded binary content,
+- exactly one of `URI` or `EmbeddedContent` must be present for each evidence item.
+
+Embedded evidence is useful for offline interchange and self-contained archival bundles, but it
+increases XML size significantly compared with external references.
 
 ## Why `ValidityCriteria` travels in export payload
 
