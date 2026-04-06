@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="urn:commissioning:sync-package:1.0"
+           xmlns="urn:commissioning:sync-package:1.0"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+  <xs:element name="SyncPackage" type="SyncPackageType"/>
+
+  <xs:complexType name="SyncPackageType">
+    <xs:sequence>
+      <xs:element name="Metadata" type="MetadataType"/>
+      <xs:element name="Items" type="ItemsType"/>
+    </xs:sequence>
+    <xs:attribute name="version" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="MetadataType">
+    <xs:sequence>
+      <xs:element name="PackageId" type="xs:string"/>
+      <xs:element name="CreatedAt" type="xs:dateTime"/>
+      <xs:element name="SourceSystem" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ItemsType">
+    <xs:sequence>
+      <xs:element name="Item" type="ItemType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ItemType">
+    <xs:sequence>
+      <xs:element name="ItemId" type="xs:string"/>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="Status" type="xs:string"/>
+      <xs:element name="UpdatedAt" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

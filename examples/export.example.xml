@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export xmlns="urn:commissioning:export:1.0" formatVersion="1.0">
+  <Header>
+    <ExportId>EXP-20260406-0001</ExportId>
+    <GeneratedAt>2026-04-06T01:00:00Z</GeneratedAt>
+    <Environment>production</Environment>
+  </Header>
+  <Records>
+    <Record>
+      <RecordId>REC-9001</RecordId>
+      <EntityType>Asset</EntityType>
+      <Payload>{"name":"Boiler Unit A","status":"active"}</Payload>
+      <Checksum>sha256:9f86d081884c7d659a2feaa0c55ad015</Checksum>
+    </Record>
+  </Records>
+</Export>
