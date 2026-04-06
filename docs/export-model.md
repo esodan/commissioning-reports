@@ -41,3 +41,4 @@ Including it in payloads ensures:
 - re-audits can reproduce original pass/fail/quality decisions,
 - recipients do not need perfect catalog synchronization to interpret evidence,
 - legal/compliance retention includes both observed data and the rule set applied.
+
