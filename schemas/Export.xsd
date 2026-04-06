@@ -1,161 +1,273 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    targetNamespace="https://cfe.gob.mx/commissioning/reports"
-    xmlns="https://cfe.gob.mx/commissioning/reports"
-    elementFormDefault="qualified"
-    attributeFormDefault="unqualified">
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="https://cfe.gob.mx/commissioning/reports"
+  xmlns="https://cfe.gob.mx/commissioning/reports"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+
+  <!-- ========================================================= -->
+  <!-- Simple Types -->
+  <!-- ========================================================= -->
+
+  <xs:simpleType name="NonEmptyString">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="IdentifierType">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="128"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="VersionType">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="64"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ReportStatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="draft"/>
+      <xs:enumeration value="completed"/>
+      <xs:enumeration value="signed"/>
+      <xs:enumeration value="exported"/>
+      <xs:enumeration value="imported"/>
+      <xs:enumeration value="rejected"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TestStatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="pending"/>
+      <xs:enumeration value="in_progress"/>
+      <xs:enumeration value="completed"/>
+      <xs:enumeration value="cancelled"/>
+      <xs:enumeration value="rejected"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ResultStatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="passed"/>
+      <xs:enumeration value="failed"/>
+      <xs:enumeration value="inconclusive"/>
+      <xs:enumeration value="not_applicable"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="EvidenceTypeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="result_pdf"/>
+      <xs:enumeration value="calibration_certificate"/>
+      <xs:enumeration value="photo"/>
+      <xs:enumeration value="attachment"/>
+      <xs:enumeration value="generated_xml"/>
+      <xs:enumeration value="signature_file"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SignatureStatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="pending"/>
+      <xs:enumeration value="valid"/>
+      <xs:enumeration value="invalid"/>
+      <xs:enumeration value="expired"/>
+      <xs:enumeration value="revoked"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- ========================================================= -->
+  <!-- Root -->
+  <!-- ========================================================= -->
 
   <xs:element name="Export" type="ExportType"/>
 
   <xs:complexType name="ExportType">
     <xs:sequence>
       <xs:element name="Report" type="ReportType"/>
-      <xs:element name="ProjectRef" type="ProjectRefType" minOccurs="0"/>
-      <xs:element name="AssetRef" type="AssetRefType"/>
-      <xs:element name="Test" type="TestType" maxOccurs="unbounded"/>
-      <xs:element name="Measurement" type="MeasurementType" maxOccurs="unbounded"/>
-      <xs:element name="TestEvaluation" type="TestEvaluationType"/>
-      <xs:element name="Evidence" type="EvidenceType"/>
-      <xs:element name="Signer" type="SignerType"/>
-      <xs:element name="Signature" type="SignatureType"/>
     </xs:sequence>
-    <xs:attribute name="exportId" type="xs:string" use="required"/>
-    <xs:attribute name="createdAt" type="xs:dateTime" use="required"/>
+    <xs:attribute name="version" type="VersionType" use="required"/>
+    <xs:attribute name="generatedAt" type="xs:dateTime" use="optional"/>
   </xs:complexType>
+
+  <!-- ========================================================= -->
+  <!-- Report -->
+  <!-- ========================================================= -->
 
   <xs:complexType name="ReportType">
     <xs:sequence>
-      <xs:element name="ReportId" type="xs:string"/>
-      <xs:element name="Title" type="xs:string"/>
-      <xs:element name="GeneratedAt" type="xs:dateTime"/>
-      <xs:element name="ValidityCriteria" type="ValidityCriteriaType"/>
+      <xs:element name="ProjectRef" type="ProjectRefType" minOccurs="0"/>
+      <xs:element name="AssetRef" type="AssetRefType"/>
+      <xs:element name="Title" type="NonEmptyString"/>
+      <xs:element name="ReportTypeName" type="IdentifierType"/>
+      <xs:element name="Notes" type="xs:string" minOccurs="0"/>
+      <xs:element name="Tests" type="TestsType"/>
+      <xs:element name="EvidenceList" type="EvidenceListType" minOccurs="0"/>
+      <xs:element name="PreparedBy" type="SignerType" minOccurs="0"/>
+      <xs:element name="Signature" type="SignatureType" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="id" type="IdentifierType" use="required"/>
+    <xs:attribute name="folio" type="IdentifierType" use="required"/>
+    <xs:attribute name="createdAt" type="xs:dateTime" use="required"/>
+    <xs:attribute name="status" type="ReportStatusType" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="ProjectRefType">
-    <xs:sequence>
-      <xs:element name="ProjectId" type="xs:string"/>
-      <xs:element name="Name" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
+    <xs:attribute name="id" type="IdentifierType" use="optional"/>
+    <xs:attribute name="code" type="IdentifierType" use="optional"/>
+    <xs:attribute name="catalogVersion" type="VersionType" use="optional"/>
   </xs:complexType>
 
   <xs:complexType name="AssetRefType">
     <xs:sequence>
-      <xs:element name="AssetId" type="xs:string"/>
-      <xs:element name="AssetName" type="xs:string" minOccurs="0"/>
+      <xs:element name="CIM_ID" type="IdentifierType"/>
+      <xs:element name="IFC_ID" type="IdentifierType" minOccurs="0"/>
+      <xs:element name="OperationalID" type="IdentifierType" minOccurs="0"/>
+      <xs:element name="SerialNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="Brand" type="xs:string" minOccurs="0"/>
+      <xs:element name="Model" type="xs:string" minOccurs="0"/>
+      <xs:element name="Description" type="xs:string" minOccurs="0"/>
+      <xs:element name="Location" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="IdentifierType" use="optional"/>
+  </xs:complexType>
+
+  <!-- ========================================================= -->
+  <!-- Tests -->
+  <!-- ========================================================= -->
+
+  <xs:complexType name="TestsType">
+    <xs:sequence>
+      <xs:element name="Test" type="TestType" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="TestType">
     <xs:sequence>
-      <xs:element name="TestId" type="xs:string"/>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element name="Status" type="TestStatusType"/>
-      <xs:element name="PerformedAt" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="Code" type="IdentifierType" minOccurs="0"/>
+      <xs:element name="Name" type="NonEmptyString"/>
+      <xs:element name="Description" type="NonEmptyString"/>
+      <xs:element name="TestTypeName" type="IdentifierType"/>
+      <xs:element name="Notes" type="xs:string" minOccurs="0"/>
+      <xs:element name="Measurements" type="MeasurementsType"/>
+      <xs:element name="TestEvaluation" type="TestEvaluationType" minOccurs="0"/>
+      <xs:element name="EvidenceList" type="EvidenceListType" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="id" type="IdentifierType" use="required"/>
+    <xs:attribute name="gguid" type="IdentifierType" use="required"/>
+    <xs:attribute name="platformTestId" type="IdentifierType" use="optional"/>
+    <xs:attribute name="startedAt" type="xs:dateTime" use="optional"/>
+    <xs:attribute name="finishedAt" type="xs:dateTime" use="optional"/>
+    <xs:attribute name="status" type="TestStatusType" use="required"/>
   </xs:complexType>
 
-  <xs:simpleType name="TestStatusType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="PENDING"/>
-      <xs:enumeration value="PASSED"/>
-      <xs:enumeration value="FAILED"/>
-    </xs:restriction>
-  </xs:simpleType>
+  <!-- ========================================================= -->
+  <!-- Measurements -->
+  <!-- ========================================================= -->
+
+  <xs:complexType name="MeasurementsType">
+    <xs:sequence>
+      <xs:element name="Measurement" type="MeasurementType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
 
   <xs:complexType name="MeasurementType">
     <xs:sequence>
-      <xs:element name="MeasurementId" type="xs:string"/>
-      <xs:element name="Type" type="MeasurementTypeEnum"/>
-      <xs:element name="Value" type="xs:decimal" minOccurs="0"/>
+      <xs:element name="Code" type="IdentifierType" minOccurs="0"/>
+      <xs:element name="Name" type="xs:string" minOccurs="0"/>
+      <xs:element name="Parameter" type="IdentifierType"/>
+      <xs:element name="MeasuredValueNumeric" type="xs:decimal" minOccurs="0"/>
+      <xs:element name="MeasuredValueText" type="xs:string" minOccurs="0"/>
       <xs:element name="Unit" type="xs:string" minOccurs="0"/>
-      <xs:element name="ResultState" type="MeasurementResultStateType"/>
-      <xs:element name="ObservedAt" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="Comments" type="xs:string" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="id" type="IdentifierType" use="required"/>
+    <xs:attribute name="sequence" type="xs:int" use="required"/>
+    <xs:attribute name="capturedAt" type="xs:dateTime" use="optional"/>
+    <xs:attribute name="isValid" type="xs:boolean" use="optional"/>
   </xs:complexType>
 
-  <xs:simpleType name="MeasurementTypeEnum">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="NUMERIC"/>
-      <xs:enumeration value="BOOLEAN"/>
-      <xs:enumeration value="TEXT"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="MeasurementResultStateType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="VALID"/>
-      <xs:enumeration value="OUT_OF_RANGE"/>
-      <xs:enumeration value="ERROR"/>
-    </xs:restriction>
-  </xs:simpleType>
+  <!-- ========================================================= -->
+  <!-- Test Evaluation -->
+  <!-- ========================================================= -->
 
   <xs:complexType name="TestEvaluationType">
     <xs:sequence>
-      <xs:element name="EvaluationId" type="xs:string"/>
-      <xs:element name="Summary" type="xs:string"/>
-      <xs:element name="Outcome" type="TestStatusType"/>
-      <xs:element name="EvaluatedAt" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="ValidityCriteria" type="ValidityCriteriaType" minOccurs="0"/>
+      <xs:element name="ComputedAverage" type="xs:decimal" minOccurs="0"/>
+      <xs:element name="ComputedMinimum" type="xs:decimal" minOccurs="0"/>
+      <xs:element name="ComputedMaximum" type="xs:decimal" minOccurs="0"/>
+      <xs:element name="RepresentativeValue" type="xs:decimal" minOccurs="0"/>
+      <xs:element name="Conclusion" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="IdentifierType" use="required"/>
+    <xs:attribute name="resultStatus" type="ResultStatusType" use="required"/>
+    <xs:attribute name="evaluatedAt" type="xs:dateTime" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="ValidityCriteriaType">
+    <xs:sequence>
+      <xs:element name="expression" type="NonEmptyString" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ========================================================= -->
+  <!-- Evidence -->
+  <!-- ========================================================= -->
+
+  <xs:complexType name="EvidenceListType">
+    <xs:sequence>
+      <xs:element name="Evidence" type="EvidenceType" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="EvidenceType">
     <xs:sequence>
-      <xs:element name="EvidenceId" type="xs:string"/>
-      <xs:element name="Type" type="EvidenceKindType"/>
-      <xs:element name="Uri" type="xs:anyURI"/>
+      <xs:element name="Title" type="xs:string" minOccurs="0"/>
+      <xs:element name="FileName" type="NonEmptyString"/>
+      <xs:element name="MimeType" type="NonEmptyString"/>
       <xs:element name="Description" type="xs:string" minOccurs="0"/>
+      <xs:element name="SHA256" type="xs:string" minOccurs="0"/>
+      <xs:element name="URI" type="NonEmptyString"/>
     </xs:sequence>
+    <xs:attribute name="id" type="IdentifierType" use="required"/>
+    <xs:attribute name="type" type="EvidenceTypeType" use="required"/>
+    <xs:attribute name="sizeBytes" type="xs:long" use="optional"/>
+    <xs:attribute name="capturedAt" type="xs:dateTime" use="optional"/>
   </xs:complexType>
 
-  <xs:simpleType name="EvidenceKindType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="PHOTO"/>
-      <xs:enumeration value="DOCUMENT"/>
-      <xs:enumeration value="LOG"/>
-    </xs:restriction>
-  </xs:simpleType>
+  <!-- ========================================================= -->
+  <!-- Signer / Signature -->
+  <!-- ========================================================= -->
 
   <xs:complexType name="SignerType">
     <xs:sequence>
-      <xs:element name="SignerId" type="xs:string"/>
-      <xs:element name="FullName" type="xs:string"/>
+      <xs:element name="Name" type="NonEmptyString"/>
+      <xs:element name="EmployeeId" type="IdentifierType" minOccurs="0"/>
       <xs:element name="Role" type="xs:string" minOccurs="0"/>
       <xs:element name="Organization" type="xs:string" minOccurs="0"/>
+      <xs:element name="Email" type="xs:string" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="id" type="IdentifierType" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="SignatureType">
     <xs:sequence>
-      <xs:element name="SignatureId" type="xs:string"/>
-      <xs:element name="Format" type="SignatureFormatType"/>
-      <xs:element name="State" type="SignatureStateType"/>
-      <xs:element name="SignedAt" type="xs:dateTime" minOccurs="0"/>
-      <xs:element name="Digest" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="Signer" type="SignerType"/>
+      <xs:element name="Format" type="NonEmptyString"/>
+      <xs:element name="Algorithm" type="NonEmptyString"/>
+      <xs:element name="CertificateSerial" type="xs:string" minOccurs="0"/>
+      <xs:element name="CertificateSubject" type="xs:string" minOccurs="0"/>
+      <xs:element name="SignatureValue" type="xs:string" minOccurs="0"/>
     </xs:sequence>
-  </xs:complexType>
-
-  <xs:simpleType name="SignatureFormatType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="XADES"/>
-      <xs:enumeration value="CMS"/>
-      <xs:enumeration value="RAW"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="SignatureStateType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="PENDING"/>
-      <xs:enumeration value="VALID"/>
-      <xs:enumeration value="REJECTED"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:complexType name="ValidityCriteriaType">
-    <xs:sequence>
-      <xs:element name="expression" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:attribute name="id" type="IdentifierType" use="required"/>
+    <xs:attribute name="signedAt" type="xs:dateTime" use="required"/>
+    <xs:attribute name="status" type="SignatureStatusType" use="required"/>
   </xs:complexType>
 
 </xs:schema>

@@ -1,55 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< codex/create-example-xml-files-for-sync-and-export
 <Export xmlns="https://cfe.gob.mx/commissioning/reports"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="https://cfe.gob.mx/commissioning/reports ../schemas/Export.xsd"
-        exportedAt="2026-04-06T12:00:00Z"
-        packageId="PKG-2026-04-06-001">
-  <Assets>
-    <Asset>
+        version="1.0"
+        generatedAt="2026-04-06T12:00:00Z">
+  <Report id="RPT-00045"
+          folio="FOL-2026-00045"
+          createdAt="2026-04-05T16:45:00Z"
+          status="exported">
+    <ProjectRef id="PRJ-230KV-001"
+                code="SUB-230KV-COMM-2026"
+                catalogVersion="2026.04"/>
+    <AssetRef id="AST-TR-T1">
       <CIM_ID>CIM-SUB-230KV-T1</CIM_ID>
-      <Name>Power Transformer T1</Name>
-    </Asset>
-  </Assets>
-
-  <TestDefinitions>
-    <TestDefinition gguid="TD-TR-WDG-RES-V1" code="TR_WDG_RES">
-      <Name>Transformer winding resistance</Name>
-      <ValidityCriteria>
-        <expression>ambientTempC &gt;= 15</expression>
-        <expression>ambientTempC &lt;= 35</expression>
-        <expression>maxPhaseImbalancePct &lt;= 2.0</expression>
-      </ValidityCriteria>
-    </TestDefinition>
-  </TestDefinitions>
-
-  <Reports>
-    <Report id="RPT-00045" assetRef="CIM-SUB-230KV-T1" testDefinitionRef="TD-TR-WDG-RES-V1" executedAt="2026-04-05T16:45:00Z">
-      <Operator>tech.cfe.019</Operator>
-      <Measurements>
-        <Measurement key="R_ab_mOhm" value="126.3" unit="mOhm"/>
-        <Measurement key="R_bc_mOhm" value="125.9" unit="mOhm"/>
-        <Measurement key="R_ca_mOhm" value="127.4" unit="mOhm"/>
-        <Measurement key="ambientTempC" value="24.1" unit="C"/>
-        <Measurement key="maxPhaseImbalancePct" value="1.2" unit="%"/>
-      </Measurements>
-      <Result>pass</Result>
-    </Report>
-  </Reports>
-=======
-<Export xmlns="urn:commissioning:export:1.0" formatVersion="1.0">
-  <Header>
-    <ExportId>EXP-20260406-0001</ExportId>
-    <GeneratedAt>2026-04-06T01:00:00Z</GeneratedAt>
-    <Environment>production</Environment>
-  </Header>
-  <Records>
-    <Record>
-      <RecordId>REC-9001</RecordId>
-      <EntityType>Asset</EntityType>
-      <Payload>{"name":"Boiler Unit A","status":"active"}</Payload>
-      <Checksum>sha256:9f86d081884c7d659a2feaa0c55ad015</Checksum>
-    </Record>
-  </Records>
->>>>>>> main
+      <IFC_ID>IFC-TR-T1</IFC_ID>
+      <OperationalID>T1-230KV</OperationalID>
+      <SerialNumber>SN-T1-2026-045</SerialNumber>
+      <Brand>ABB</Brand>
+      <Model>TX-230-40MVA</Model>
+      <Description>Power transformer T1 for 230 kV bay.</Description>
+      <Location>Substation North Yard - Bay 03</Location>
+    </AssetRef>
+    <Title>Transformer winding resistance report</Title>
+    <ReportTypeName>transformer_winding_resistance</ReportTypeName>
+    <Notes>Measurements captured after thermal stabilization and before energization.</Notes>
+    <Tests>
+      <Test id="TST-00045"
+            gguid="TD-TR-WDG-RES-V1"
+            platformTestId="PLAT-TR-00045"
+            startedAt="2026-04-05T16:20:00Z"
+            finishedAt="2026-04-05T16:40:00Z"
+            status="completed">
+        <Code>TR_WDG_RES</Code>
+        <Name>Transformer winding resistance</Name>
+        <Description>Measure phase-to-phase winding resistance and verify imbalance criteria.</Description>
+        <TestTypeName>winding_resistance</TestTypeName>
+        <Notes>Ambient temperature compensation not required for this acceptance check.</Notes>
+        <Measurements>
+          <Measurement id="MSR-0001" sequence="1" capturedAt="2026-04-05T16:31:00Z" isValid="true">
+            <Code>R_ab_mOhm</Code>
+            <Name>Phase A-B resistance</Name>
+            <Parameter>phase_ab_resistance</Parameter>
+            <MeasuredValueNumeric>126.3</MeasuredValueNumeric>
+            <Unit>mOhm</Unit>
+          </Measurement>
+          <Measurement id="MSR-0002" sequence="2" capturedAt="2026-04-05T16:32:00Z" isValid="true">
+            <Code>R_bc_mOhm</Code>
+            <Name>Phase B-C resistance</Name>
+            <Parameter>phase_bc_resistance</Parameter>
+            <MeasuredValueNumeric>125.9</MeasuredValueNumeric>
+            <Unit>mOhm</Unit>
+          </Measurement>
+          <Measurement id="MSR-0003" sequence="3" capturedAt="2026-04-05T16:33:00Z" isValid="true">
+            <Code>R_ca_mOhm</Code>
+            <Name>Phase C-A resistance</Name>
+            <Parameter>phase_ca_resistance</Parameter>
+            <MeasuredValueNumeric>127.4</MeasuredValueNumeric>
+            <Unit>mOhm</Unit>
+          </Measurement>
+          <Measurement id="MSR-0004" sequence="4" capturedAt="2026-04-05T16:34:00Z" isValid="true">
+            <Code>ambientTempC</Code>
+            <Name>Ambient temperature</Name>
+            <Parameter>ambient_temperature</Parameter>
+            <MeasuredValueNumeric>24.1</MeasuredValueNumeric>
+            <Unit>C</Unit>
+          </Measurement>
+          <Measurement id="MSR-0005" sequence="5" capturedAt="2026-04-05T16:35:00Z" isValid="true">
+            <Code>maxPhaseImbalancePct</Code>
+            <Name>Maximum phase imbalance</Name>
+            <Parameter>max_phase_imbalance_pct</Parameter>
+            <MeasuredValueNumeric>1.2</MeasuredValueNumeric>
+            <Unit>%</Unit>
+            <Comments>Computed from the three measured winding resistance values.</Comments>
+          </Measurement>
+        </Measurements>
+        <TestEvaluation id="EVAL-00045"
+                        resultStatus="passed"
+                        evaluatedAt="2026-04-05T16:41:00Z">
+          <ValidityCriteria>
+            <expression>ambientTempC &gt;= 15</expression>
+            <expression>ambientTempC &lt;= 35</expression>
+            <expression>maxPhaseImbalancePct &lt;= 2.0</expression>
+          </ValidityCriteria>
+          <ComputedAverage>126.53</ComputedAverage>
+          <ComputedMinimum>125.9</ComputedMinimum>
+          <ComputedMaximum>127.4</ComputedMaximum>
+          <RepresentativeValue>1.2</RepresentativeValue>
+          <Conclusion>All measured values satisfy the acceptance criteria.</Conclusion>
+        </TestEvaluation>
+        <EvidenceList>
+          <Evidence id="EVD-TEST-0001"
+                    type="photo"
+                    sizeBytes="348122"
+                    capturedAt="2026-04-05T16:28:00Z">
+            <Title>Test setup photo</Title>
+            <FileName>t1-winding-resistance-setup.jpg</FileName>
+            <MimeType>image/jpeg</MimeType>
+            <Description>Photograph of the transformer and measurement equipment before capture.</Description>
+            <SHA256>5f70bf18a086007016e948b04aed3b82103a36beA41755b6c5f2b0b1323e94c3</SHA256>
+            <URI>https://example.invalid/evidence/t1-winding-resistance-setup.jpg</URI>
+          </Evidence>
+        </EvidenceList>
+      </Test>
+    </Tests>
+    <EvidenceList>
+      <Evidence id="EVD-REPORT-0001"
+                type="result_pdf"
+                sizeBytes="125003"
+                capturedAt="2026-04-05T16:46:00Z">
+        <Title>Signed report PDF</Title>
+        <FileName>RPT-00045.pdf</FileName>
+        <MimeType>application/pdf</MimeType>
+        <Description>Generated PDF rendition of the report for archival use.</Description>
+        <SHA256>8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4</SHA256>
+        <URI>https://example.invalid/reports/RPT-00045.pdf</URI>
+      </Evidence>
+    </EvidenceList>
+    <PreparedBy id="EMP-019">
+      <Name>Tecnico CFE 019</Name>
+      <EmployeeId>019</EmployeeId>
+      <Role>Field Test Technician</Role>
+      <Organization>CFE</Organization>
+      <Email>tecnico.019@cfe.example</Email>
+    </PreparedBy>
+    <Signature id="SIG-00045"
+               signedAt="2026-04-05T16:50:00Z"
+               status="valid">
+      <Signer id="EMP-019">
+        <Name>Tecnico CFE 019</Name>
+        <EmployeeId>019</EmployeeId>
+        <Role>Field Test Technician</Role>
+        <Organization>CFE</Organization>
+        <Email>tecnico.019@cfe.example</Email>
+      </Signer>
+      <Format>XAdES-BES</Format>
+      <Algorithm>sha256WithRSAEncryption</Algorithm>
+      <CertificateSerial>4F9C2A77B31E</CertificateSerial>
+      <CertificateSubject>CN=Tecnico CFE 019, O=CFE, C=MX</CertificateSubject>
+      <SignatureValue>MEUCIQDexampleSignatureValueOnlyForSchemaValidation12345==</SignatureValue>
+    </Signature>
+  </Report>
 </Export>
