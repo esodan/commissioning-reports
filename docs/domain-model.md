@@ -6,11 +6,12 @@ The commissioning domain uses a small set of entities with clear responsibilitie
 
 - **Asset**: the equipment or system under test (identified by `CIM_ID`).
 - **TestDefinition**: the reusable blueprint that describes *what* to test and *how to evaluate*.
-- **EvaluationDefinition**: the explicit rules/criteria used to interpret measurements.
+- **EvaluationDefinition**: the evaluation block embedded in a `TestDefinition` that defines aggregation and acceptance criteria.
+- **Export**: the transport container used to deliver one or more reports to downstream systems.
 - **Report**: a container for a commissioning session or deliverable.
 - **Test**: an execution instance of a `TestDefinition` within a report.
 - **Measurement**: raw/normalized observed values captured during a test.
-- **TestEvaluation**: the interpreted outcome of measurements against an evaluation definition.
+- **TestEvaluation**: the interpreted outcome of measurements, optionally carrying the criteria and computed values used during evaluation.
 
 ## Synchronization model vs execution model
 
@@ -19,15 +20,18 @@ The model is intentionally split into two layers:
 - **Synchronization model** (catalog and definitions):
   - `Asset` (identity and references)
   - `TestDefinition`
-  - `EvaluationDefinition`
+  - embedded `EvaluationDefinition`
   - optional catalog metadata and source provenance
 - **Execution model** (runtime and history):
+  - `Export`
   - `Report`
   - `Test`
   - `Measurement`
   - `TestEvaluation`
 
 This separation keeps distributed synchronization stable and idempotent while allowing local execution to progress independently over time.
+
+Within the current export schema, one `Export` can contain one or more `Report` elements, and each `Report` contains its own asset context, tests, measurements, and optional evaluation/evidence/signature data.
 
 ## Why `TestDefinition` != `Test`
 
@@ -51,9 +55,9 @@ Separating observation from interpretation supports:
 
 ## Why `EvaluationDefinition` is explicit
 
-`EvaluationDefinition` is a first-class entity so evaluation logic is not hidden inside ad-hoc test payloads:
+`EvaluationDefinition` is modeled explicitly inside each `TestDefinition` so evaluation logic is not hidden inside ad-hoc test payloads:
 
-- creates a stable reference target for synchronization and export,
+- keeps synchronization payloads self-describing at the test-definition level,
 - ensures deterministic interpretation across systems,
 - enables version tracking and provenance,
 - allows clear distinction between “data captured” and “rule used to score it”.
