@@ -1,41 +1,197 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="urn:commissioning:sync-package:1.0"
-           xmlns="urn:commissioning:sync-package:1.0"
+           targetNamespace="https://cfe.gob.mx/commissioning/reports"
+           xmlns="https://cfe.gob.mx/commissioning/reports"
            elementFormDefault="qualified"
            attributeFormDefault="unqualified">
 
-  <xs:element name="SyncPackage" type="SyncPackageType"/>
+  <xs:element name="SyncPackage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Catalog" type="CatalogType" minOccurs="0"/>
+        <xs:element name="Project" type="ProjectType" minOccurs="0"/>
+        <xs:element name="Entities" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Projects" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Project" type="ProjectType" minOccurs="0" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
 
-  <xs:complexType name="SyncPackageType">
+              <xs:element name="Assets" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Asset" type="AssetType" minOccurs="0" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="TestDefinitions" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="TestDefinition" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:complexContent>
+                          <xs:extension base="TestDefinitionType"/>
+                        </xs:complexContent>
+                      </xs:complexType>
+
+                      <xs:unique name="uqMeasurementDefinitionIdPerTestDefinition">
+                        <xs:selector xpath="MeasurementDefinitions/MeasurementDefinition"/>
+                        <xs:field xpath="@id"/>
+                      </xs:unique>
+
+                      <xs:unique name="uqMeasurementDefinitionSequencePerTestDefinition">
+                        <xs:selector xpath="MeasurementDefinitions/MeasurementDefinition"/>
+                        <xs:field xpath="@sequence"/>
+                      </xs:unique>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="MeasurementDefinitions" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="MeasurementDefinition" type="MeasurementDefinitionType" minOccurs="0" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="EvaluationDefinitions" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="EvaluationDefinition" type="EvaluationDefinitionType" minOccurs="0" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="AssetTestAssignments" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="AssetTestAssignment" type="AssetTestAssignmentType" minOccurs="0" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:key name="kAssetId">
+      <xs:selector xpath="Entities/Assets/Asset"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+
+    <xs:key name="kAssetCimId">
+      <xs:selector xpath="Entities/Assets/Asset"/>
+      <xs:field xpath="CIM_ID"/>
+    </xs:key>
+
+    <xs:key name="kTestDefinitionId">
+      <xs:selector xpath="Entities/TestDefinitions/TestDefinition"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+
+    <xs:key name="kTestDefinitionGguid">
+      <xs:selector xpath="Entities/TestDefinitions/TestDefinition"/>
+      <xs:field xpath="@gguid"/>
+    </xs:key>
+
+    <xs:keyref name="krAssetRefToAssetCimId" refer="kAssetCimId">
+      <xs:selector xpath="Entities/AssetTestAssignments/AssetTestAssignment"/>
+      <xs:field xpath="@assetRef"/>
+    </xs:keyref>
+
+    <xs:keyref name="krTestRefToTestDefinitionGguid" refer="kTestDefinitionGguid">
+      <xs:selector xpath="Entities/AssetTestAssignments/AssetTestAssignment/TestRef"/>
+      <xs:field xpath="@testDefinitionRef"/>
+    </xs:keyref>
+  </xs:element>
+
+  <xs:complexType name="CatalogType">
     <xs:sequence>
-      <xs:element name="Metadata" type="MetadataType"/>
-      <xs:element name="Items" type="ItemsType"/>
+      <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
     </xs:sequence>
-    <xs:attribute name="version" type="xs:string" use="required"/>
   </xs:complexType>
 
-  <xs:complexType name="MetadataType">
+  <xs:complexType name="ProjectType">
     <xs:sequence>
-      <xs:element name="PackageId" type="xs:string"/>
-      <xs:element name="CreatedAt" type="xs:dateTime"/>
-      <xs:element name="SourceSystem" type="xs:string"/>
+      <xs:element name="Name" type="xs:string" minOccurs="0"/>
+      <xs:element name="Description" type="xs:string" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="optional"/>
   </xs:complexType>
 
-  <xs:complexType name="ItemsType">
+  <xs:complexType name="AssetType">
     <xs:sequence>
-      <xs:element name="Item" type="ItemType" maxOccurs="unbounded"/>
+      <xs:element name="CIM_ID" type="xs:string"/>
+      <xs:element name="Name" type="xs:string" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
   </xs:complexType>
 
-  <xs:complexType name="ItemType">
+  <xs:complexType name="TestDefinitionType">
     <xs:sequence>
-      <xs:element name="ItemId" type="xs:string"/>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element name="Status" type="xs:string"/>
-      <xs:element name="UpdatedAt" type="xs:dateTime"/>
+      <xs:element name="Name" type="xs:string" minOccurs="0"/>
+      <xs:element name="MeasurementDefinitions" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="MeasurementDefinition" type="MeasurementDefinitionType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="gguid" type="xs:string" use="required"/>
+    <xs:attribute name="definitionSource" default="platform">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="platform"/>
+          <xs:enumeration value="user"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="platformTestId" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="MeasurementDefinitionType">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="0"/>
+      <xs:element name="Unit" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="sequence" type="xs:integer" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="EvaluationDefinitionType">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string" minOccurs="0"/>
+      <xs:element name="AggregationMode" type="xs:string" minOccurs="0"/>
+      <xs:element name="ValidityCriteria" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="expression" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="AssetTestAssignmentType">
+    <xs:sequence>
+      <xs:element name="TestRef" minOccurs="1" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="testDefinitionRef" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="assetRef" type="xs:string" use="required"/>
   </xs:complexType>
 
 </xs:schema>
