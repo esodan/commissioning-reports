@@ -206,6 +206,7 @@
       <xs:element name="AssetTestAssignments" type="AssetTestAssignmentsType" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="id" type="IdentifierType" use="required"/>
+    <xs:attribute name="contract" type="IdentifierType" use="optional"/>
     <xs:attribute name="catalogVersion" type="VersionType" use="optional"/>
   </xs:complexType>
 

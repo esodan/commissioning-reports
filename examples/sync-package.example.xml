@@ -103,7 +103,7 @@
     </TestDefinitions>
   </Catalog>
 
-  <Project id="PRJ-0001" catalogVersion="2026.04">
+  <Project id="PRJ-0001" catalogVersion="2026.04" contract="CNTR-0001">
     <Code>SE-NORTE-230KV</Code>
     <Name>Substation North 230 kV Commissioning</Name>
     <Description>Project package for assets and test assignments required during commissioning.</Description>
