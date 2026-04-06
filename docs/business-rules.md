@@ -22,8 +22,8 @@ This avoids blocking field work due to temporary sync gaps.
 
 Export is a stricter boundary than local execution.
 
-- If any export-scoped entity references unresolved catalog items, export must fail validation.
-- The failure should report each unresolved reference explicitly.
+- If any report in an export payload cannot be exported with resolved test identity, asset identity, or evaluation context, the export must fail validation.
+- The failure should report each unresolved identifier or missing dependency explicitly, grouped by affected report when applicable.
 - Export retries are allowed once resolution completes.
 
 ## 4. Persist `TestEvaluation` explicitly
@@ -36,7 +36,15 @@ Reasons:
 - supports approvals/signoff workflows,
 - enables independent audit and reprocessing.
 
-## 5. One `Report` can contain many `Test`
+## 5. One `Export` can contain many `Report`
+
+Cardinality rule:
+
+- `Export (1) -> (N) Report`
+
+A single export payload may aggregate multiple reports for downstream delivery, archival, or transfer.
+
+## 6. One `Report` can contain many `Test`
 
 Cardinality rule:
 
@@ -44,7 +52,7 @@ Cardinality rule:
 
 A single report aggregates multiple executed tests for an asset, scope, or commissioning phase.
 
-## 6. One `Test` can contain many `Measurement`
+## 7. One `Test` can contain many `Measurement`
 
 Cardinality rule:
 
