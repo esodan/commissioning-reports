@@ -54,6 +54,50 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="GGUIDType">
+  <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="128"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="CIMIdentifierType">
+  <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="256"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="IFCIdentifierType">
+  <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="256"/>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="CIMExtensionsType">
+  <xs:sequence>
+    <xs:element name="mRID" type="CIMIdentifierType" minOccurs="0"/>
+    <xs:element name="Name" type="NonEmptyString" minOccurs="0"/>
+    <xs:element name="Description" type="xs:string" minOccurs="0"/>
+    <xs:element name="ClassName" type="NonEmptyString" minOccurs="0"/>
+    <xs:element name="Profile" type="NonEmptyString" minOccurs="0"/>
+    <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="IFCExtensionsType">
+  <xs:sequence>
+    <xs:element name="GlobalId" type="IFCIdentifierType" minOccurs="0"/>
+    <xs:element name="Name" type="NonEmptyString" minOccurs="0"/>
+    <xs:element name="Description" type="xs:string" minOccurs="0"/>
+    <xs:element name="EntityName" type="NonEmptyString" minOccurs="0"/>
+    <xs:element name="SchemaName" type="NonEmptyString" minOccurs="0"/>
+    <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+
   <!-- ========================================================= -->
   <!-- Root -->
   <!-- ========================================================= -->
@@ -141,9 +185,12 @@
       <xs:element name="TestType" type="IdentifierType"/>
       <xs:element name="MeasurementDefinitions" type="MeasurementDefinitionsType"/>
       <xs:element name="EvaluationDefinition" type="EvaluationDefinitionType"/>
+
+      <xs:element name="CIMExtensions" type="CIMExtensionsType" minOccurs="0"/>
+      <xs:element name="IFCExtensions" type="IFCExtensionsType" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="id" type="IdentifierType" use="required"/>
-    <xs:attribute name="gguid" type="IdentifierType" use="required"/>
+    <xs:attribute name="gguid" type="GGUIDType" use="required"/>
     <xs:attribute name="platformTestId" type="IdentifierType" use="optional"/>
     <xs:attribute name="version" type="VersionType" use="required"/>
     <xs:attribute name="isActive" type="xs:boolean" use="required"/>
@@ -222,8 +269,38 @@
 
   <xs:complexType name="AssetType">
     <xs:sequence>
-      <xs:element name="CIM_ID" type="IdentifierType"/>
-      <xs:element name="IFC_ID" type="IdentifierType" minOccurs="0"/>
+      <xs:element name="CIM_ID" type="CIMIdentifierType">
+        <xs:annotation>
+          <xs:documentation>
+            Internal CIM reference for the asset. Business rule: this value must be identical
+            to Asset/CIMExtensions/mRID when CIMExtensions is present.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="IFC_ID" type="IFCIdentifierType" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Internal IFC reference for the asset. Business rule: this value must be identical
+            to Asset/IFCExtensions/GlobalId when IFCExtensions is present.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="CIMExtensions" type="CIMExtensionsType" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Extended CIM metadata for the asset. When present, it should immediately follow the
+            internal asset references and mRID must match CIM_ID.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="IFCExtensions" type="IFCExtensionsType" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Extended IFC metadata for the asset. When present, it should immediately follow the
+            internal asset references and GlobalId must match IFC_ID.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="OperationalID" type="IdentifierType" minOccurs="0"/>
       <xs:element name="SerialNumber" type="xs:string" minOccurs="0"/>
       <xs:element name="Brand" type="xs:string" minOccurs="0"/>
@@ -248,7 +325,7 @@
     <xs:sequence>
       <xs:element name="TestRef" type="TestRefType" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="assetRef" type="IdentifierType" use="required"/>
+    <xs:attribute name="assetRef" type="CIMIdentifierType" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="TestRefType">

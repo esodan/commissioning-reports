@@ -31,6 +31,13 @@ Reference integrity is constrained by stable keys:
 
 These rules ensure references survive transport, storage, and merging across systems.
 
+For asset payloads, `Asset.CIM_ID` and `Asset.IFC_ID` are internal references that anchor the asset
+to its extension blocks. Business rules:
+- `Asset.CIM_ID` must be equal to `Asset.CIMExtensions/mRID`.
+- `Asset.IFC_ID` must be equal to `Asset.IFCExtensions/GlobalId`.
+- `CIM_ID` and `IFC_ID` should be immediately followed by their corresponding `CIMExtensions` and
+  `IFCExtensions` blocks in the asset payload.
+
 ## Role of `definitionSource`
 
 `definitionSource` records where a definition originated (e.g., platform baseline vs local/user-defined).

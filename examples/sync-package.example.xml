@@ -109,7 +109,22 @@
     <Description>Project package for assets and test assignments required during commissioning.</Description>
     <Assets>
       <Asset id="AST-0001">
-        <CIM_ID>CIM-SUB-230KV-T1</CIM_ID>
+        <CIM_ID>urn:uuid:cim-sub-230kv-t1</CIM_ID>
+        <IFC_ID>3hXw7pQ8n4g8YlK2sR0fA1</IFC_ID>
+        <CIMExtensions>
+          <mRID>urn:uuid:cim-sub-230kv-t1</mRID>
+          <Name>Transformer T1</Name>
+          <Description>Primary power transformer represented in the CIM network model.</Description>
+          <ClassName>PowerTransformer</ClassName>
+          <Profile>Equipment</Profile>
+        </CIMExtensions>
+        <IFCExtensions>
+          <GlobalId>3hXw7pQ8n4g8YlK2sR0fA1</GlobalId>
+          <Name>Transformer T1</Name>
+          <Description>IFC asset instance for the commissioned transformer.</Description>
+          <EntityName>IfcTransformer</EntityName>
+          <SchemaName>IFC4</SchemaName>
+        </IFCExtensions>
         <OperationalID>T1-230KV</OperationalID>
         <SerialNumber>SN-T1-2026-045</SerialNumber>
         <Brand>ABB</Brand>
@@ -118,7 +133,13 @@
         <Location>SE Norte - Bay 03</Location>
       </Asset>
       <Asset id="AST-0002">
-        <CIM_ID>CIM-BKR-230KV-12</CIM_ID>
+        <CIM_ID>urn:uuid:cim-bkr-230kv-12</CIM_ID>
+        <CIMExtensions>
+          <mRID>urn:uuid:cim-bkr-230kv-12</mRID>
+          <Name>Breaker 12</Name>
+          <ClassName>Breaker</ClassName>
+          <Profile>Equipment</Profile>
+        </CIMExtensions>
         <OperationalID>BRK-12</OperationalID>
         <SerialNumber>SN-BKR-2026-012</SerialNumber>
         <Brand>Siemens</Brand>
@@ -128,10 +149,10 @@
       </Asset>
     </Assets>
     <AssetTestAssignments>
-      <AssetTestAssignment assetRef="CIM-SUB-230KV-T1">
+      <AssetTestAssignment assetRef="urn:uuid:cim-sub-230kv-t1">
         <TestRef testDefinitionRef="TD-TR-WDG-RES-V1" isRequired="true" executionOrder="1"/>
       </AssetTestAssignment>
-      <AssetTestAssignment assetRef="CIM-BKR-230KV-12">
+      <AssetTestAssignment assetRef="urn:uuid:cim-bkr-230kv-12">
         <TestRef testDefinitionRef="TD-BKR-TIME-V2" isRequired="true" executionOrder="1"/>
       </AssetTestAssignment>
     </AssetTestAssignments>

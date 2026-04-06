@@ -12,14 +12,28 @@
                 code="SUB-230KV-COMM-2026"
                 catalogVersion="2026.04"/>
     <AssetRef id="AST-TR-T1">
-      <CIM_ID>CIM-SUB-230KV-T1</CIM_ID>
-      <IFC_ID>IFC-TR-T1</IFC_ID>
+      <CIM_ID>urn:uuid:cim-sub-230kv-t1</CIM_ID>
+      <IFC_ID>3hXw7pQ8n4g8YlK2sR0fA1</IFC_ID>
       <OperationalID>T1-230KV</OperationalID>
       <SerialNumber>SN-T1-2026-045</SerialNumber>
       <Brand>ABB</Brand>
       <Model>TX-230-40MVA</Model>
       <Description>Power transformer T1 for 230 kV bay.</Description>
       <Location>Substation North Yard - Bay 03</Location>
+      <CIMExtensions>
+        <mRID>urn:uuid:cim-sub-230kv-t1</mRID>
+        <Name>Transformer T1</Name>
+        <Description>Primary power transformer represented in the CIM network model.</Description>
+        <ClassName>PowerTransformer</ClassName>
+        <Profile>Equipment</Profile>
+      </CIMExtensions>
+      <IFCExtensions>
+        <GlobalId>3hXw7pQ8n4g8YlK2sR0fA1</GlobalId>
+        <Name>Transformer T1</Name>
+        <Description>IFC asset instance for the commissioned transformer.</Description>
+        <EntityName>IfcTransformer</EntityName>
+        <SchemaName>IFC4</SchemaName>
+      </IFCExtensions>
     </AssetRef>
     <Title>Transformer winding resistance report</Title>
     <ReportTypeName>transformer_winding_resistance</ReportTypeName>
@@ -101,6 +115,20 @@
             <URI>https://example.invalid/evidence/t1-winding-resistance-setup.jpg</URI>
           </Evidence>
         </EvidenceList>
+        <CIMExtensions>
+          <mRID>urn:uuid:test-tr-wdg-res-00045</mRID>
+          <Name>Transformer winding resistance</Name>
+          <Description>CIM-linked commissioning test instance for transformer T1.</Description>
+          <ClassName>DiagnosticTest</ClassName>
+          <Profile>Commissioning</Profile>
+        </CIMExtensions>
+        <IFCExtensions>
+          <GlobalId>1fP0v9KQj2eR4tU6wX8yZ0</GlobalId>
+          <Name>Winding resistance test</Name>
+          <Description>IFC-linked test object associated with the transformer commissioning workflow.</Description>
+          <EntityName>IfcPerformanceHistory</EntityName>
+          <SchemaName>IFC4</SchemaName>
+        </IFCExtensions>
       </Test>
     </Tests>
     <EvidenceList>
@@ -139,6 +167,20 @@
       <CertificateSubject>CN=Tecnico CFE 019, O=CFE, C=MX</CertificateSubject>
       <SignatureValue>MEUCIQDexampleSignatureValueOnlyForSchemaValidation12345==</SignatureValue>
     </Signature>
+    <CIMExtensions>
+      <mRID>urn:uuid:report-rpt-00045</mRID>
+      <Name>Transformer winding resistance report</Name>
+      <Description>CIM export metadata for report RPT-00045.</Description>
+      <ClassName>CommissioningReport</ClassName>
+      <Profile>Commissioning</Profile>
+    </CIMExtensions>
+    <IFCExtensions>
+      <GlobalId>0sT7uV2wX9yZaBcDeFgH12</GlobalId>
+      <Name>Transformer winding resistance report</Name>
+      <Description>IFC metadata attached to the exported commissioning report.</Description>
+      <EntityName>IfcDocumentInformation</EntityName>
+      <SchemaName>IFC4</SchemaName>
+    </IFCExtensions>
   </Report>
   <Report id="RPT-00046"
           folio="FOL-2026-00046"
@@ -148,13 +190,19 @@
                 code="SUB-230KV-COMM-2026"
                 catalogVersion="2026.04"/>
     <AssetRef id="AST-BKR-12">
-      <CIM_ID>CIM-BKR-230KV-12</CIM_ID>
+      <CIM_ID>urn:uuid:cim-bkr-230kv-12</CIM_ID>
       <OperationalID>BRK-12</OperationalID>
       <SerialNumber>SN-BKR-2026-012</SerialNumber>
       <Brand>Siemens</Brand>
       <Model>3AP1FI</Model>
       <Description>Breaker 12 in the 230 kV line bay.</Description>
       <Location>Substation North Yard - Line Bay 12</Location>
+      <CIMExtensions>
+        <mRID>urn:uuid:cim-bkr-230kv-12</mRID>
+        <Name>Breaker 12</Name>
+        <ClassName>Breaker</ClassName>
+        <Profile>Equipment</Profile>
+      </CIMExtensions>
     </AssetRef>
     <Title>Breaker operation time report</Title>
     <ReportTypeName>breaker_operation_time</ReportTypeName>
@@ -197,6 +245,12 @@
           <RepresentativeValue>63.0</RepresentativeValue>
           <Conclusion>Breaker timing values are within the accepted limits.</Conclusion>
         </TestEvaluation>
+        <CIMExtensions>
+          <mRID>urn:uuid:test-bkr-time-00046</mRID>
+          <Name>Breaker operation time</Name>
+          <ClassName>DiagnosticTest</ClassName>
+          <Profile>Commissioning</Profile>
+        </CIMExtensions>
       </Test>
     </Tests>
     <PreparedBy id="EMP-021">
@@ -206,5 +260,11 @@
       <Organization>CFE</Organization>
       <Email>tecnico.021@cfe.example</Email>
     </PreparedBy>
+    <CIMExtensions>
+      <mRID>urn:uuid:report-rpt-00046</mRID>
+      <Name>Breaker operation time report</Name>
+      <ClassName>CommissioningReport</ClassName>
+      <Profile>Commissioning</Profile>
+    </CIMExtensions>
   </Report>
 </Export>

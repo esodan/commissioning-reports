@@ -5,6 +5,13 @@
 The commissioning domain uses a small set of entities with clear responsibilities:
 
 - **Asset**: the equipment or system under test (identified by `CIM_ID`).
+
+For export payloads, `AssetRef.CIM_ID` and `AssetRef.IFC_ID` are internal references that anchor the
+asset to its extension blocks. Business rules:
+- `AssetRef.CIM_ID` must be equal to `AssetRef.CIMExtensions/mRID`.
+- `AssetRef.IFC_ID` must be equal to `AssetRef.IFCExtensions/GlobalId`.
+- `CIM_ID` and `IFC_ID` should be immediately followed by their corresponding `CIMExtensions` and
+  `IFCExtensions` blocks in the asset reference payload.
 - **TestDefinition**: the reusable blueprint that describes *what* to test and *how to evaluate*.
 - **EvaluationDefinition**: the evaluation block embedded in a `TestDefinition` that defines aggregation and acceptance criteria.
 - **Export**: the transport container used to deliver one or more reports to downstream systems.
