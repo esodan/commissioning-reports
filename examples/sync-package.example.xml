@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SyncPackage xmlns="https://cfe.gob.mx/commissioning/reports"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://cfe.gob.mx/commissioning/reports ../schemas/SyncPackage.xsd"
+             generatedAt="2026-04-06T11:30:00Z"
+             sourceSystem="FIELD-TABLET-07">
+  <Assets>
+    <Asset>
+      <CIM_ID>CIM-SUB-230KV-T1</CIM_ID>
+      <Name>Power Transformer T1</Name>
+      <Substation>SE Norte</Substation>
+      <VoltageLevel unit="kV">230</VoltageLevel>
+    </Asset>
+    <Asset>
+      <CIM_ID>CIM-BKR-230KV-12</CIM_ID>
+      <Name>Breaker 12</Name>
+      <Substation>SE Norte</Substation>
+      <VoltageLevel unit="kV">230</VoltageLevel>
+    </Asset>
+  </Assets>
+
+  <TestDefinitions>
+    <TestDefinition gguid="TD-TR-WDG-RES-V1" code="TR_WDG_RES">
+      <Name>Transformer winding resistance</Name>
+      <Discipline>Electrical</Discipline>
+      <ValidityCriteria>
+        <expression>ambientTempC &gt;= 15</expression>
+        <expression>ambientTempC &lt;= 35</expression>
+        <expression>maxPhaseImbalancePct &lt;= 2.0</expression>
+      </ValidityCriteria>
+    </TestDefinition>
+    <TestDefinition gguid="TD-BKR-TIME-V2" code="BKR_OP_TIME">
+      <Name>Breaker operation time</Name>
+      <Discipline>Electrical</Discipline>
+      <ValidityCriteria>
+        <expression>tripTimeMs &lt;= 60</expression>
+        <expression>closeTimeMs &lt;= 80</expression>
+      </ValidityCriteria>
+    </TestDefinition>
+  </TestDefinitions>
+
+  <SyncAssignments>
+    <SyncAssignment id="SA-0001" assetRef="CIM-SUB-230KV-T1" testDefinitionRef="TD-TR-WDG-RES-V1" priority="high"/>
+    <SyncAssignment id="SA-0002" assetRef="CIM-BKR-230KV-12" testDefinitionRef="TD-BKR-TIME-V2" priority="normal"/>
+  </SyncAssignments>
+</SyncPackage>
