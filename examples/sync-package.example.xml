@@ -2,45 +2,138 @@
 <SyncPackage xmlns="https://cfe.gob.mx/commissioning/reports"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://cfe.gob.mx/commissioning/reports ../schemas/SyncPackage.xsd"
+             version="1.0"
              generatedAt="2026-04-06T11:30:00Z"
-             sourceSystem="FIELD-TABLET-07">
-  <Assets>
-    <Asset>
-      <CIM_ID>CIM-SUB-230KV-T1</CIM_ID>
-      <Name>Power Transformer T1</Name>
-      <Substation>SE Norte</Substation>
-      <VoltageLevel unit="kV">230</VoltageLevel>
-    </Asset>
-    <Asset>
-      <CIM_ID>CIM-BKR-230KV-12</CIM_ID>
-      <Name>Breaker 12</Name>
-      <Substation>SE Norte</Substation>
-      <VoltageLevel unit="kV">230</VoltageLevel>
-    </Asset>
-  </Assets>
+             sourceFormat="xml">
+  <Catalog version="2026.04">
+    <TestDefinitions>
+      <TestDefinition id="TD-0001"
+                      gguid="TD-TR-WDG-RES-V1"
+                      platformTestId="PLAT-TR-WDG-RES"
+                      version="1.0"
+                      isActive="true"
+                      definitionSource="platform">
+        <Code>TR_WDG_RES</Code>
+        <Name>Transformer winding resistance</Name>
+        <Description>Acceptance test for phase winding resistance and phase imbalance.</Description>
+        <TestType>winding_resistance</TestType>
+        <MeasurementDefinitions>
+          <MeasurementDefinition id="MD-0001" sequence="1" isRequired="true">
+            <Code>R_ab_mOhm</Code>
+            <Name>Phase A-B resistance</Name>
+            <Description>Measured resistance between phases A and B.</Description>
+            <Parameter>phase_ab_resistance</Parameter>
+            <Unit>mOhm</Unit>
+          </MeasurementDefinition>
+          <MeasurementDefinition id="MD-0002" sequence="2" isRequired="true">
+            <Code>R_bc_mOhm</Code>
+            <Name>Phase B-C resistance</Name>
+            <Description>Measured resistance between phases B and C.</Description>
+            <Parameter>phase_bc_resistance</Parameter>
+            <Unit>mOhm</Unit>
+          </MeasurementDefinition>
+          <MeasurementDefinition id="MD-0003" sequence="3" isRequired="true">
+            <Code>R_ca_mOhm</Code>
+            <Name>Phase C-A resistance</Name>
+            <Description>Measured resistance between phases C and A.</Description>
+            <Parameter>phase_ca_resistance</Parameter>
+            <Unit>mOhm</Unit>
+          </MeasurementDefinition>
+          <MeasurementDefinition id="MD-0004" sequence="4" isRequired="true">
+            <Code>ambientTempC</Code>
+            <Name>Ambient temperature</Name>
+            <Description>Ambient temperature during measurement acquisition.</Description>
+            <Parameter>ambient_temperature</Parameter>
+            <Unit>C</Unit>
+          </MeasurementDefinition>
+          <MeasurementDefinition id="MD-0005" sequence="5" isRequired="true">
+            <Code>maxPhaseImbalancePct</Code>
+            <Name>Maximum phase imbalance</Name>
+            <Description>Maximum percentage imbalance across phase resistances.</Description>
+            <Parameter>max_phase_imbalance_pct</Parameter>
+            <Unit>%</Unit>
+          </MeasurementDefinition>
+        </MeasurementDefinitions>
+        <EvaluationDefinition id="ED-0001">
+          <AggregationMode>representative</AggregationMode>
+          <RepresentativeSource>max_phase_imbalance_pct</RepresentativeSource>
+          <ExpectedUnit>%</ExpectedUnit>
+          <ValidityCriteria>
+            <expression>ambientTempC &gt;= 15</expression>
+            <expression>ambientTempC &lt;= 35</expression>
+            <expression>maxPhaseImbalancePct &lt;= 2.0</expression>
+          </ValidityCriteria>
+        </EvaluationDefinition>
+      </TestDefinition>
+      <TestDefinition id="TD-0002"
+                      gguid="TD-BKR-TIME-V2"
+                      platformTestId="PLAT-BKR-OP-TIME"
+                      version="2.0"
+                      isActive="true"
+                      definitionSource="platform">
+        <Code>BKR_OP_TIME</Code>
+        <Name>Breaker operation time</Name>
+        <Description>Opening and closing operation time verification for breaker commissioning.</Description>
+        <TestType>operation_time</TestType>
+        <MeasurementDefinitions>
+          <MeasurementDefinition id="MD-0101" sequence="1" isRequired="true">
+            <Code>tripTimeMs</Code>
+            <Name>Trip time</Name>
+            <Description>Measured opening time of the breaker.</Description>
+            <Parameter>trip_time_ms</Parameter>
+            <Unit>ms</Unit>
+          </MeasurementDefinition>
+          <MeasurementDefinition id="MD-0102" sequence="2" isRequired="true">
+            <Code>closeTimeMs</Code>
+            <Name>Close time</Name>
+            <Description>Measured closing time of the breaker.</Description>
+            <Parameter>close_time_ms</Parameter>
+            <Unit>ms</Unit>
+          </MeasurementDefinition>
+        </MeasurementDefinitions>
+        <EvaluationDefinition id="ED-0002">
+          <AggregationMode>manual</AggregationMode>
+          <ExpectedUnit>ms</ExpectedUnit>
+          <ValidityCriteria>
+            <expression>tripTimeMs &lt;= 60</expression>
+            <expression>closeTimeMs &lt;= 80</expression>
+          </ValidityCriteria>
+        </EvaluationDefinition>
+      </TestDefinition>
+    </TestDefinitions>
+  </Catalog>
 
-  <TestDefinitions>
-    <TestDefinition gguid="TD-TR-WDG-RES-V1" code="TR_WDG_RES">
-      <Name>Transformer winding resistance</Name>
-      <Discipline>Electrical</Discipline>
-      <ValidityCriteria>
-        <expression>ambientTempC &gt;= 15</expression>
-        <expression>ambientTempC &lt;= 35</expression>
-        <expression>maxPhaseImbalancePct &lt;= 2.0</expression>
-      </ValidityCriteria>
-    </TestDefinition>
-    <TestDefinition gguid="TD-BKR-TIME-V2" code="BKR_OP_TIME">
-      <Name>Breaker operation time</Name>
-      <Discipline>Electrical</Discipline>
-      <ValidityCriteria>
-        <expression>tripTimeMs &lt;= 60</expression>
-        <expression>closeTimeMs &lt;= 80</expression>
-      </ValidityCriteria>
-    </TestDefinition>
-  </TestDefinitions>
-
-  <SyncAssignments>
-    <SyncAssignment id="SA-0001" assetRef="CIM-SUB-230KV-T1" testDefinitionRef="TD-TR-WDG-RES-V1" priority="high"/>
-    <SyncAssignment id="SA-0002" assetRef="CIM-BKR-230KV-12" testDefinitionRef="TD-BKR-TIME-V2" priority="normal"/>
-  </SyncAssignments>
+  <Project id="PRJ-0001" catalogVersion="2026.04">
+    <Code>SE-NORTE-230KV</Code>
+    <Name>Substation North 230 kV Commissioning</Name>
+    <Description>Project package for assets and test assignments required during commissioning.</Description>
+    <Assets>
+      <Asset id="AST-0001">
+        <CIM_ID>CIM-SUB-230KV-T1</CIM_ID>
+        <OperationalID>T1-230KV</OperationalID>
+        <SerialNumber>SN-T1-2026-045</SerialNumber>
+        <Brand>ABB</Brand>
+        <Model>TX-230-40MVA</Model>
+        <Description>Power transformer T1.</Description>
+        <Location>SE Norte - Bay 03</Location>
+      </Asset>
+      <Asset id="AST-0002">
+        <CIM_ID>CIM-BKR-230KV-12</CIM_ID>
+        <OperationalID>BRK-12</OperationalID>
+        <SerialNumber>SN-BKR-2026-012</SerialNumber>
+        <Brand>Siemens</Brand>
+        <Model>3AP1FI</Model>
+        <Description>Breaker 12 on the 230 kV line bay.</Description>
+        <Location>SE Norte - Line Bay 12</Location>
+      </Asset>
+    </Assets>
+    <AssetTestAssignments>
+      <AssetTestAssignment assetRef="CIM-SUB-230KV-T1">
+        <TestRef testDefinitionRef="TD-TR-WDG-RES-V1" isRequired="true" executionOrder="1"/>
+      </AssetTestAssignment>
+      <AssetTestAssignment assetRef="CIM-BKR-230KV-12">
+        <TestRef testDefinitionRef="TD-BKR-TIME-V2" isRequired="true" executionOrder="1"/>
+      </AssetTestAssignment>
+    </AssetTestAssignments>
+  </Project>
 </SyncPackage>
