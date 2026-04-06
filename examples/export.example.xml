@@ -140,4 +140,71 @@
       <SignatureValue>MEUCIQDexampleSignatureValueOnlyForSchemaValidation12345==</SignatureValue>
     </Signature>
   </Report>
+  <Report id="RPT-00046"
+          folio="FOL-2026-00046"
+          createdAt="2026-04-05T17:10:00Z"
+          status="completed">
+    <ProjectRef id="PRJ-230KV-001"
+                code="SUB-230KV-COMM-2026"
+                catalogVersion="2026.04"/>
+    <AssetRef id="AST-BKR-12">
+      <CIM_ID>CIM-BKR-230KV-12</CIM_ID>
+      <OperationalID>BRK-12</OperationalID>
+      <SerialNumber>SN-BKR-2026-012</SerialNumber>
+      <Brand>Siemens</Brand>
+      <Model>3AP1FI</Model>
+      <Description>Breaker 12 in the 230 kV line bay.</Description>
+      <Location>Substation North Yard - Line Bay 12</Location>
+    </AssetRef>
+    <Title>Breaker operation time report</Title>
+    <ReportTypeName>breaker_operation_time</ReportTypeName>
+    <Notes>Trip and close times captured during mechanical operation checks.</Notes>
+    <Tests>
+      <Test id="TST-00046"
+            gguid="TD-BKR-TIME-V2"
+            platformTestId="PLAT-BKR-00046"
+            startedAt="2026-04-05T16:55:00Z"
+            finishedAt="2026-04-05T17:05:00Z"
+            status="completed">
+        <Code>BKR_OP_TIME</Code>
+        <Name>Breaker operation time</Name>
+        <Description>Measure breaker trip and close timing against acceptance criteria.</Description>
+        <TestTypeName>operation_time</TestTypeName>
+        <Measurements>
+          <Measurement id="MSR-0101" sequence="1" capturedAt="2026-04-05T16:58:00Z" isValid="true">
+            <Code>tripTimeMs</Code>
+            <Name>Trip time</Name>
+            <Parameter>trip_time_ms</Parameter>
+            <MeasuredValueNumeric>48.0</MeasuredValueNumeric>
+            <Unit>ms</Unit>
+          </Measurement>
+          <Measurement id="MSR-0102" sequence="2" capturedAt="2026-04-05T16:59:00Z" isValid="true">
+            <Code>closeTimeMs</Code>
+            <Name>Close time</Name>
+            <Parameter>close_time_ms</Parameter>
+            <MeasuredValueNumeric>63.0</MeasuredValueNumeric>
+            <Unit>ms</Unit>
+          </Measurement>
+        </Measurements>
+        <TestEvaluation id="EVAL-00046"
+                        resultStatus="passed"
+                        evaluatedAt="2026-04-05T17:06:00Z">
+          <ValidityCriteria>
+            <expression>tripTimeMs &lt;= 60</expression>
+            <expression>closeTimeMs &lt;= 80</expression>
+          </ValidityCriteria>
+          <ComputedMaximum>63.0</ComputedMaximum>
+          <RepresentativeValue>63.0</RepresentativeValue>
+          <Conclusion>Breaker timing values are within the accepted limits.</Conclusion>
+        </TestEvaluation>
+      </Test>
+    </Tests>
+    <PreparedBy id="EMP-021">
+      <Name>Tecnico CFE 021</Name>
+      <EmployeeId>021</EmployeeId>
+      <Role>Protection and Control Technician</Role>
+      <Organization>CFE</Organization>
+      <Email>tecnico.021@cfe.example</Email>
+    </PreparedBy>
+  </Report>
 </Export>

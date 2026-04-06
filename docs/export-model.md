@@ -8,15 +8,16 @@ Unlike `SyncPackage`, export focuses on **historical execution truth** rather th
 
 ## Export XML structure
 
-The export XML should be organized as a context-first document with explicit references:
+The export XML is a multi-report payload defined by the current export schema.
 
-- `<Export>` root metadata (version, createdAt, producer)
-- `<Report>` nodes for each exported report
-- nested `<Test>` nodes per report
-- nested `<Measurement>` nodes per test
-- nested/associated `<TestEvaluation>` nodes per test
-- embedded or referenced definition context (`TestDefinition`, `EvaluationDefinition`, `ValidityCriteria`)
-- identity references (`assetRef`, `testDefinitionRef`) using stable keys
+- `<Export>` root metadata (`version`, optional `generatedAt`)
+- one or more nested `<Report>` elements with report identity, folio, creation time, and report status
+- optional `<ProjectRef>` plus required `<AssetRef>` context inside each report
+- nested `<Tests>` containing one or more `<Test>` elements per report
+- nested `<Measurements>` per test
+- optional nested `<TestEvaluation>` per test, including `ValidityCriteria` when needed
+- optional report-level and test-level `<EvidenceList>`
+- optional `PreparedBy` and `Signature` elements for signoff context
 
 This structure preserves both machine readability and traceability.
 
@@ -25,9 +26,9 @@ This structure preserves both machine readability and traceability.
 Historical meaning is preserved by exporting:
 
 - immutable execution timestamps and identifiers,
-- the definition identifiers used at run time,
+- the test identifiers used at run time (`gguid`, optional `platformTestId`, and type/name fields),
 - evaluation records as separate persisted objects,
-- sufficient rule context to reproduce outcome interpretation.
+- sufficient rule context to reproduce outcome interpretation through `ValidityCriteria` and computed values.
 
 As a result, downstream systems can distinguish “what happened” from “what the current catalog says now”.
 
@@ -39,6 +40,5 @@ Including it in payloads ensures:
 
 - historical outcomes remain explainable even if central criteria evolve,
 - re-audits can reproduce original pass/fail/quality decisions,
-- recipients do not need perfect catalog synchronization to interpret evidence,
+- recipients do not need a synchronized catalog snapshot to interpret the exported outcome,
 - legal/compliance retention includes both observed data and the rule set applied.
-

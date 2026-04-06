@@ -89,7 +89,7 @@
 
   <xs:complexType name="ExportType">
     <xs:sequence>
-      <xs:element name="Report" type="ReportType"/>
+      <xs:element name="Report" type="ReportType" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="version" type="VersionType" use="required"/>
     <xs:attribute name="generatedAt" type="xs:dateTime" use="optional"/>
